@@ -8,7 +8,6 @@ valid_passports = 0
 
 new_passport = []
 for line in data:
-    print(line, len(line))
     if '\n' == line:
         if country_id in new_passport:
             new_passport.remove(country_id)
