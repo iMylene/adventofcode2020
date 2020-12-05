@@ -8,7 +8,7 @@ back = 'B'
 left = 'L'
 right = 'R'
 
-highest_seat_id_list = []
+seat_id_list = []
 for ticket in data:
     row_seats_max = 127
     row_seats_min = 0
@@ -27,6 +27,8 @@ for ticket in data:
             col_seats_min = 1 + (col_seats_min+col_seats_max)//2
 
     seat_id = row_seats_max * 8 + col_seats_max
-    highest_seat_id_list.append(seat_id)
+    seat_id_list.append(seat_id)
 
-print(max(highest_seat_id_list))
+for seat_id in sorted(seat_id_list):
+    if seat_id + 2 in seat_id_list and seat_id + 1 not in seat_id_list:
+        print(seat_id+1)
