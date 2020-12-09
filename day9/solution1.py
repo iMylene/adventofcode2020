@@ -13,10 +13,10 @@ for number in rest_data:
             break
         #make sums with the prev_num1 and the rest of the preamble
         for prev_num2 in preamble[cnt+1:]:
-            sum = prev_num1 + prev_num2
+            summer = prev_num1 + prev_num2
             
             #invalid number
-            if sum == number:
+            if summer == number:
                 found = True
                 break
     if not found:
