@@ -55,9 +55,6 @@ while change:
                     temp_row.append('#')
         temp_data.append(temp_row[:])   
     data = temp_data[:]
-    for r in data:
-        print("".join(r))
-    print()
 
 occ = 0
 for r in data:
