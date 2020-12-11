@@ -1,46 +1,74 @@
 import sys
 
-data = [ line.strip('\n') for line in sys.stdin.readlines() ]
+data = [ list(line.strip('\n')) for line in sys.stdin.readlines() ]
 maxrow = len(data)
 maxcol = len(data[0])
 maxocc = 4
+change = True
 
-#first round, fill all the empty seats with persons:
-occ = [ line.replace('L','#') for line in data ]
+mutations = [(x,y) for x in [-1,0,1] for y in [-1,0,1]]
+mutations.remove((0,0))
 
-#make dict with the occupied seat as key and the num of neigh as value
-neigh_dict = {}
-for i, row in enumerate(occ):
-    for j, col in enumerate(occ):
-        if '#' in occ[i][j]:
-            #count num of neigh
-            counter = 0
+def valid(x,y):
+    if x < 0 or y < 0:
+        return False
+    if x >= maxcol or y >= maxrow:
+        return False
+    return True
 
-            #check: up, diag upperleft, diag upperright
-            if i != 0:
-                if '#' in occ[i-1][j]:
-                    counter += 1
-                if j != 0 and '#' in occ[i-1][j-1]:
-                    counter += 1
-                if j != maxcol - 1 and '#' in occ[i-1][j+1]:
-                    counter += 1
+# Data = T-1 round
 
-            #check: same level neigh: left and right
-            if j != 0 and '#' in occ[i][j-1]:
-                    counter += 1
-            if j != maxcol - 1 and '#' in occ[i][j+1]:
-                    counter += 1
-            
-            #check: down, diag lowerleft, diag lowerright
-            if i != maxrow - 1:
-                if '#' in occ[i+1][j]:
-                    counter += 1
-                if j != 0 and '#' in occ[i+1][j-1]:
-                    counter += 1
-                if j != maxcol - 1 and '#' in occ[i+1][j+1]:
-                    counter += 1
+#T Round, voor elke rij, voor elke stoel: pas regels toe
 
-            neigh_dict[i,j] = counter
-            if neigh_dict[i,j] >= maxocc:
-                del neigh_dict[i,j]
-print(neigh_dict) 
+#T+1 Round, voor elke rij, voor elke stoel: pas regels toe
+#als er geen verandering is: stop
+while change:
+    change = False
+    temp_data = []
+    for y,r in enumerate(data):
+        temp_row = []
+        for x,s in enumerate(r):
+            if s == '.':
+                temp_row.append('.')
+                continue
+            if s == 'L':
+                occ = 0
+                for mutation in mutations:
+                    if occ>0:
+                        continue
+                    dx, dy = mutation
+                    nx, ny = x+dx, y+dy
+                    if valid(nx,ny) and data[ny][nx] == '#':
+                        occ += 1
+                if occ==0:
+                    temp_row.append('#')
+                    change = True
+                else:
+                    temp_row.append('L')
+            if s == '#':
+                occ = 0
+                for mutation in mutations:
+                    if occ>=maxocc:
+                        continue
+                    dx, dy = mutation
+                    nx, ny = x+dx, y+dy
+                    if valid(nx,ny) and data[ny][nx] == '#':
+                        occ += 1
+                if occ>=maxocc:
+                    temp_row.append('L')
+                    change = True
+                else:
+                    temp_row.append('#')
+        temp_data.append(temp_row[:])   
+    data = temp_data[:]
+    for r in data:
+        print("".join(r))
+    print()
+
+#tel in matrix: hoe vaak #
+occ = 0
+for r in data:
+    for s in r:
+        if s == '#':
+            occ += 1
+print(occ)
