@@ -16,12 +16,6 @@ def valid(x,y):
         return False
     return True
 
-# Data = T-1 round
-
-#T Round, voor elke rij, voor elke stoel: pas regels toe
-
-#T+1 Round, voor elke rij, voor elke stoel: pas regels toe
-#als er geen verandering is: stop
 while change:
     change = False
     temp_data = []
@@ -65,7 +59,6 @@ while change:
         print("".join(r))
     print()
 
-#tel in matrix: hoe vaak #
 occ = 0
 for r in data:
     for s in r:
